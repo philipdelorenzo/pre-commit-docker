@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+# If the ${HOME}/.smarsh is not preset, create it.
+if [ ! -d ${HOME}/.smarsh ]; then mkdir -p ${HOME}/.smarsh; fi
+
+# Check for the pre-existing repo ~> git@github.com:philipdelorenzo/pre-commit-docker.git
+if ! -d ${HOME}/.smarsh/pre-commit-docker; then
+  git clone git@github.com:philipdelorenzo/pre-commit-docker.git
+else
+  cd ${HOME}/.smarsh/pre-commit-docker || exit 1 && git checkout master && git pull
+fi
+
+echo "Ensuring latest version of Docker image..."
+cd ${HOME}/.smarsh/pre-commit-docker || exit 1 && docker build . -t proarchive-tools/dev-tools:latest -q
+
+# We want to run this docker image as a container in the context of the location of this file ~> ${REPO}/.githooks/*
+docker run \
+  -v "${DIR}/..:/src" -v "${DIR}/../.cache:/.pre-commit-cache" \
+  --rm proarchive-tools/dev-tools:latest /bin/bash -c /worker/pre-commit.sh
