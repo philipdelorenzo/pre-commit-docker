@@ -1,0 +1,11 @@
+.cache
+.github
+reqs/**
+docs/**
+.buildkite/**
+build/**
+puppet/**
+*.md
+*.json
+.pre-commit-config.yaml
+test/**
