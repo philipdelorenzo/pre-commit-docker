@@ -1,9 +1,9 @@
 FROM ubuntu:focal
 
-ENV PRE_COMMIT_HOME=/.pre-commit-cache
-ENV PATH="/sbin:/bin:/usr/sbin:/usr/bin:${HOME}/.local/bin"
-
 WORKDIR /worker
+
+ENV PRE_COMMIT_HOME=/worker/.pre-commit-cache
+ENV PATH="/sbin:/bin:/usr/sbin:/usr/bin:${HOME}/.local/bin"
 
 # Non Root please
 RUN useradd -m linter

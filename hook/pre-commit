@@ -17,5 +17,5 @@ cd "${HOME}/.dev-tools/pre-commit-docker" || exit 1 && docker build . -t philipd
 
 # We want to run this docker image as a container in the context of the location of this file ~> ${REPO}/.githooks/*
 docker run \
-  -v "${DIR}/..:/src" -v "${DIR}/../.cache:/.pre-commit-cache" \
+  -v "${DIR}/..:/src" -v "${DIR}/../.cache:/worker/.pre-commit-cache" \
   --rm philipdelorenzo/dev-tools:latest /bin/bash -c /worker/pre-commit.sh
