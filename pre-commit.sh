@@ -8,10 +8,11 @@ export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
 . ~/.asdf/asdf.sh
 
 pre-commit run --all-files \
+  && echo "Checking Markdown code..." \
+  && markdownlint . \
+    --ignore 'docs/reqs/**.md' \
+    --ignore 'node_modules' \
+    --config .markdownlint.json \
+  && npx prettier --write .
 #&& echo "Checking Ruby code..." \
 #&& rufo . \
-&& echo "Checking Markdown code..." && markdownlint . \
-  --ignore 'docs/reqs/**.md' \
-  --ignore 'node_modules' \
-  --config .markdownlint.json \
-&& npx prettier --write .
