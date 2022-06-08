@@ -12,13 +12,13 @@ RUN newgrp linter
 
 COPY .tool-versions /home/linter/.tool-versions
 COPY setup.sh setup.sh
-COPY pre-commit.sh pre-commit.sh
 COPY asdf.sh asdf.sh
 RUN chown -R linter:linter /worker
 
 # Install apt packages and system level resources
 RUN bash /worker/setup.sh
-
 USER linter
-
 RUN bash /worker/asdf.sh
+WORKDIR /src
+COPY pre-commit.sh pre-commit.sh
+RUN chown -R linter:linter /src
