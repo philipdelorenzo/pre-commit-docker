@@ -19,6 +19,3 @@ RUN chown -R linter:linter /worker
 RUN bash /worker/setup.sh
 USER linter
 RUN bash /worker/asdf.sh
-WORKDIR /src
-COPY pre-commit.sh pre-commit.sh
-RUN chown -R linter:linter /src

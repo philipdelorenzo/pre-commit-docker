@@ -7,7 +7,7 @@ export PATH=/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin
 # shellcheck disable=SC1090
 . ~/.asdf/asdf.sh
 
-pre-commit run --all-files \
+cd /src || exit 1 && pre-commit run --all-files \
   && echo "Checking Markdown code..." \
   && markdownlint . \
     --ignore 'docs/reqs/**.md' \
