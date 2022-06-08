@@ -20,4 +20,3 @@ RUN chown -R linter:linter /worker
 RUN bash /worker/setup.sh
 USER linter
 RUN bash /worker/asdf.sh
-WORKDIR /src
