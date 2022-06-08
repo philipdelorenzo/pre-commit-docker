@@ -1,4 +1,4 @@
-FROM ubuntu:focal-20200720
+FROM ubuntu:focal
 
 ENV PRE_COMMIT_HOME=/.pre-commit-cache
 ENV PATH="/sbin:/bin:/usr/sbin:/usr/bin:${HOME}/.local/bin"
