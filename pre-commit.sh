@@ -16,6 +16,8 @@ cd /src || exit 1 && pre-commit run --all-files \
     --ignore 'docs/reqs/**.md' \
     --ignore 'node_modules' \
     --config .markdownlint.json \
-  && npx prettier --write .
+  && npx prettier --write . \
+  && echo "Checking CircleCi Config..." \
+  && if [ -d ".circleci" ]; then circleci config validate .circleci/config.yml; else echo "No CircleCi config found...continuing."; fi
 #&& echo "Checking Ruby code..." \
 #&& rufo . \
