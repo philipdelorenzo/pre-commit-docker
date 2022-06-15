@@ -18,6 +18,6 @@ cd /src || exit 1 && pre-commit run --all-files \
     --config .markdownlint.json \
   && npx prettier --write . \
   && echo "Checking CircleCi Config..." \
-  && circleci config validate
+  && if [ -d ".circleci" ]; then circleci config validate .circleci/config.yml; else echo "No CircleCi config found...continuing."; fi
 #&& echo "Checking Ruby code..." \
 #&& rufo . \

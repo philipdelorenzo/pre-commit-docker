@@ -18,6 +18,9 @@ apt-get -y install autoconf bison build-essential libssl-dev libyaml-dev \
   libreadline6-dev zlib1g-dev libncurses5-dev libffi-dev libgdbm6 \
   libgdbm-dev libdb-dev
 
+# Install CircleCi CLI
+#curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | bash
+
 # python & pip install
 apt-get -y install python3-pip
 pip3 install pre-commit==2.3.0
