@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export PATH=/home/linter:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:$PATH
+
 # source asdf setup
 . ~/.bashrc
 # shellcheck disable=SC1090
