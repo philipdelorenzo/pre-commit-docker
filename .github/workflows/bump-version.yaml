@@ -3,7 +3,7 @@
 
 name: Bump version
 on:
-  push:
+  pull_request:
     branches:
       - master
 jobs:
