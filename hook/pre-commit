@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+MAIN="${DIR}"/..
 
 # If the ${HOME}/.dev-tools is not preset, create it.
 if [ ! -d "${HOME}"/.dev-tools ]; then mkdir -p "${HOME}"/.dev-tools; fi
 
-# Check for the pre-existing repo ~> git@github.com:philipdelorenzo/pre-commit-docker.git
+# Check for the pre-existing repo ~> git@github.com:Smarsh/pre-commit-docker.git
 if [ ! -d "${HOME}"/.dev-tools/pre-commit-docker ]; then
-  git clone git@github.com:philipdelorenzo/pre-commit-docker.git "${HOME}"/.dev-tools/pre-commit-docker
+  git clone git@github.com:Smarsh/pre-commit-docker.git "${HOME}"/.dev-tools/pre-commit-docker
 else
-  rm -rf "${HOME}"/.dev-tools/pre-commit-docker
   cd "${HOME}"/.dev-tools/pre-commit-docker || exit 1 && git checkout master && git reset --hard HEAD && git pull
-  
+
   # We want to get the configurations (you can modify) for linters and put them in the root of this repo.
   echo "Ensuring the latest configs in the current repo..."
 
@@ -26,26 +26,29 @@ else
   # Let's update the configs
   for i in "${CFGS[@]}"; do
       if [ -f "${HOME}"/.dev-tools/pre-commit-docker/configs/"${i}" ]; then
-        if [ ! -f "${DIR}"/"${i}" ]; then
-          echo "Adding config -- ${i}"; cp -r "${HOME}"/.dev-tools/pre-commit-docker/configs/"${i}" "${DIR}"; fi
+        if [ ! -f "${MAIN}"/"${i}" ]; then
+          echo "Adding config -- ${i}"
+          cp -r "${HOME}"/.dev-tools/pre-commit-docker/configs/"${i}" "${MAIN}"
+        else
+          echo "Configuration located...skipping!"
         fi
-        echo "Configuration located...skipping!"
       fi
   done
 fi
 
 echo "Ensuring latest version of the Docker image..."
-cd "${HOME}"/.dev-tools/pre-commit-docker || exit 1 && docker build . -t philipdelorenzo/dev-tools:latest -q &
+cd "${HOME}"/.dev-tools/pre-commit-docker || exit 1 && docker build . -t smarsh/dev-tools:latest -q &
 PID=$!
 i=1
 sp="/-\|"
 echo -n ' '
 while [ -d /proc/$PID ]
 do
+  # shellcheck disable=SC2059
   printf "\b${sp:i++%${#sp}:1}"
 done
 
 # We want to run this docker image as a container in the context of the location of this file ~> ${REPO}/.githooks/*
 docker run \
   -v "${DIR}"/..:/src -v "${DIR}"/../.cache:/worker/.pre-commit-cache \
-  --rm philipdelorenzo/dev-tools:latest /bin/bash /worker/pre-commit.sh
+  --rm smarsh/dev-tools:latest /bin/bash /worker/pre-commit.sh
