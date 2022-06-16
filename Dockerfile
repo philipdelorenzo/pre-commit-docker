@@ -3,7 +3,7 @@ FROM ubuntu:focal
 WORKDIR /worker
 
 ENV PRE_COMMIT_HOME=/worker/.pre-commit-cache
-ENV PATH="/home/linter:/sbin:/bin:/usr/sbin:/usr/bin:${HOME}/.local/bin"
+ENV PATH="/home/linter/.local/bin:/sbin:/bin:/usr/sbin:/usr/bin:/home/linter"
 
 # Non Root please
 RUN useradd -m linter
