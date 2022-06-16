@@ -48,6 +48,8 @@ do
   printf "\b${sp:i++%${#sp}:1}"
 done
 
+echo "Latest Docker image version installed..."
+
 # We want to run this docker image as a container in the context of the location of this file ~> ${REPO}/.githooks/*
 docker run \
   -v "${DIR}"/..:/src -v "${DIR}"/../.cache:/worker/.pre-commit-cache \
