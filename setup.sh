@@ -19,7 +19,7 @@ apt-get -y install autoconf bison build-essential libssl-dev libyaml-dev \
   libgdbm-dev libdb-dev
 
 # Install CircleCi CLI
-#export PATH=/home/linter:$PATH
+export PATH=/home/linter:$PATH
 curl -fLSs https://raw.githubusercontent.com/CircleCI-Public/circleci-cli/master/install.sh | DESTDIR=/home/linter bash
 
 # python & pip install
