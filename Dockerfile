@@ -20,5 +20,6 @@ RUN chown -R linter:linter /worker
 
 # Install apt packages and system level resources
 RUN bash /worker/setup.sh
+
 USER linter
 RUN bash /worker/asdf.sh
