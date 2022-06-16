@@ -1,0 +1,7 @@
+.cache
+.github
+test/**
+node_modules
+
+# Doorstop && ADRs
+docs/reqs/**.md
