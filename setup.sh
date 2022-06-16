@@ -23,4 +23,4 @@ apt-get -y install autoconf bison build-essential libssl-dev libyaml-dev \
 
 # python & pip install
 apt-get -y install python3-pip
-pip3 install pre-commit==2.3.0
+pip3 install pre-commit==2.19.0
