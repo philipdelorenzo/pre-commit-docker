@@ -2,7 +2,6 @@
 .github
 reqs/**
 docs/**
-.buildkite/**
 build/**
 puppet/**
 *.md

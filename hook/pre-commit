@@ -25,7 +25,12 @@ else
 
   # Let's update the configs
   for i in "${CFGS[@]}"; do
-      if [ -f "${HOME}"/.dev-tools/pre-commit-docker/configs/"${i}" ]; then echo "Updating config -- ${i}"; cp -Rf "${HOME}"/.dev-tools/pre-commit-docker/configs/"${i}" "${DIR}"; fi
+      if [ -f "${HOME}"/.dev-tools/pre-commit-docker/configs/"${i}" ]; then
+        if [ ! -f "${DIR}"/"${i}" ]; then
+          echo "Adding config -- ${i}"; cp -r "${HOME}"/.dev-tools/pre-commit-docker/configs/"${i}" "${DIR}"; fi
+        fi
+        echo "Configuration located...skipping!"
+      fi
   done
 fi
 
