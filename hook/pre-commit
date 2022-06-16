@@ -37,18 +37,19 @@ else
 fi
 
 echo "Ensuring latest version of the Docker image..."
-cd "${HOME}"/.dev-tools/pre-commit-docker || exit 1 && docker build . -t smarsh/dev-tools:latest -q &
-PID=$!
-i=1
-sp="/-\|"
-echo -n ' '
-while [ -d /proc/"${PID}" ]
-do
-  # shellcheck disable=SC2059
-  printf "\b${sp:i++%${#sp}:1}"
-done
+cd "${HOME}"/.dev-tools/pre-commit-docker || exit 1 && docker build . -t smarsh/dev-tools:latest -q 2>/dev/null &
+pid=$! # Process Id of the previous running command
 
-echo "Latest Docker image version installed..."
+spin='-\|/'
+
+i=0
+while kill -0 $pid 2>/dev/null
+do
+  i=$(( (i+1) %4 ))
+  # shellcheck disable=SC2059
+  printf "\r${spin:${i}:1}"
+  sleep .1
+done
 
 # We want to run this docker image as a container in the context of the location of this file ~> ${REPO}/.githooks/*
 docker run \
