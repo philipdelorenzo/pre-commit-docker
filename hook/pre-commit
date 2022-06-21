@@ -1,21 +1,61 @@
 #!/usr/bin/env bash
 
+unset GIT_INDEX_FILE
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+MAIN="${DIR}"/..
 
 # If the ${HOME}/.dev-tools is not preset, create it.
-if [ ! -d "${HOME}/.dev-tools" ]; then mkdir -p "${HOME}/.dev-tools"; fi
+if [ ! -d "${HOME}"/.dev-tools ]; then mkdir -p "${HOME}"/.dev-tools; fi
 
-# Check for the pre-existing repo ~> git@github.com:philipdelorenzo/pre-commit-docker.git
-if [ ! -d "${HOME}/.dev-tools/pre-commit-docker" ]; then
-  git clone git@github.com:philipdelorenzo/pre-commit-docker.git "${HOME}/.dev-tools/pre-commit-docker"
+# Check for the pre-existing repo ~> git@github.com:Smarsh/pre-commit-docker.git
+if [ ! -d "${HOME}"/.dev-tools/pre-commit-docker ]; then
+  git clone git@github.com:Smarsh/pre-commit-docker.git "${HOME}"/.dev-tools/pre-commit-docker
 else
-  cd "${HOME}/.dev-tools/pre-commit-docker" || exit 1 && git checkout master && git pull
+  cd "${HOME}"/.dev-tools/pre-commit-docker || exit 1 && git checkout master
+  cd "${HOME}"/.dev-tools/pre-commit-docker || exit 1 && git reset --hard HEAD
+  cd "${HOME}"/.dev-tools/pre-commit-docker || exit 1 && git pull
+
+  # We want to get the configurations (you can modify) for linters and put them in the root of this repo.
+  echo "Ensuring the latest configs in the current repo..."
+
+  # Let's create an array with the items in the configs/ dir and iterate over it, leaving out all dirs...we only want files
+  CFGS=() # Set the array
+  ls -a "${HOME}"/.dev-tools/pre-commit-docker/configs > "${DIR}"/pci.tmp
+  while IFS= read -r line; do
+      CFGS+=("$line")
+  done < "${DIR}"/pci.tmp
+  rm "${DIR}"/pci.tmp
+
+  # Let's update the configs
+  for i in "${CFGS[@]}"; do
+      if [ -f "${HOME}"/.dev-tools/pre-commit-docker/configs/"${i}" ]; then
+        if [ ! -f "${MAIN}"/"${i}" ]; then
+          echo "Adding config -- ${i}"
+          cp -r "${HOME}"/.dev-tools/pre-commit-docker/configs/"${i}" "${MAIN}"
+        else
+          echo "Configuration located...skipping!"
+        fi
+      fi
+  done
 fi
 
-echo "Ensuring latest version of Docker image..."
-cd "${HOME}/.dev-tools/pre-commit-docker" || exit 1 && docker build . -t philipdelorenzo/dev-tools:latest -q
+echo "Ensuring latest version of the Docker image..."
+cd "${HOME}"/.dev-tools/pre-commit-docker || exit 1 && docker build . -t smarsh/dev-tools:latest -q 2>/dev/null &
+pid=$! # Process Id of the previous running command
+
+spin='-\|/'
+
+i=0
+while kill -0 $pid 2>/dev/null
+do
+  i=$(( (i+1) %4 ))
+  # shellcheck disable=SC2059
+  printf "\r${spin:${i}:1}"
+  sleep .1
+done
 
 # We want to run this docker image as a container in the context of the location of this file ~> ${REPO}/.githooks/*
 docker run \
-  -v "${DIR}/..:/src" -v "${DIR}/../.cache:/worker/.pre-commit-cache" \
-  --rm philipdelorenzo/dev-tools:latest /bin/bash /worker/pre-commit.sh
+  -v "${DIR}"/..:/src -v "${DIR}"/../.cache:/worker/.pre-commit-cache \
+  --rm smarsh/dev-tools:latest
