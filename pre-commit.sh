@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+unset GIT_INDEX_FILE
+
 export PATH=/home/linter:/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/bin:$PATH
 
 # source asdf setup

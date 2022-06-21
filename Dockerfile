@@ -23,3 +23,5 @@ RUN bash /worker/setup.sh
 
 USER linter
 RUN bash /worker/asdf.sh
+
+ENTRYPOINT [ "/worker/pre-commit.sh" ]
