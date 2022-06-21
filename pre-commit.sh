@@ -16,6 +16,6 @@ cd /src || exit 1 && pre-commit run --all-files \
   && echo "[ADDON] - Checking HTML files (prettier)..." \
   && npx prettier --write . \
   && echo "[ADDON] - Checking CircleCi Config (circleci)..." \
-  && if [ -d "/src/.circleci" ]; then /home/linter/circleci config validate /src/.circleci/config.yml; else echo "No CircleCi config found...continuing."; fi
+  && if [ -d ".circleci" ]; then circleci config validate .circleci/config.yml; else echo "No CircleCi config found...continuing."; fi
   #&& echo "Checking Ruby code..." \
   #&& rufo . \
