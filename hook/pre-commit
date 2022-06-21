@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+unset GIT_INDEX_FILE
+
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 MAIN="${DIR}"/..
 
