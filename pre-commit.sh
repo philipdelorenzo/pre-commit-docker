@@ -14,6 +14,6 @@ cd /src || exit 1 && pre-commit run --all-files \
   && echo "[ADDON] - Checking CircleCi Config (circleci)..." \
   && if [ -d "/src/.circleci" ]; then /home/linter/circleci config validate /src/.circleci/config.yml; else echo "No CircleCi config found...continuing."; fi \
   && echo "[ADDON] - Checking HTML files (prettier)..." \
-  && npx prettier --embedded-language-formatting=off --check .
+  && npx prettier --embedded-language-formatting=off --loglevel error --check .
   #&& echo "Checking Ruby code..." \
   #&& rufo . \
